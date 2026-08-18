@@ -3,15 +3,17 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>💋祝我们七夕快乐 ！💕</title>
+<title>💫祝我们七夕快乐 💕</title>
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body {
     min-height: 100vh;
-    background: linear-gradient(135deg, #1a0a1e 0%, #2d1233 40%, #1a0a1e 100%);
+    background: linear-gradient(135deg, #1a0a1e 0%, #2d1233 50%, #1a0a1e 100%);
     display: flex; justify-content: center; align-items: center;
     overflow: hidden; font-family: 'Georgia', 'STKaiti', 'KaiTi', serif;
   }
+
+  /* 音乐按钮 */
   .music-btn {
     position: fixed; top: 20px; right: 20px; z-index: 200;
     width: 40px; height: 40px; border-radius: 50%;
@@ -22,98 +24,148 @@
   }
   .music-btn.playing { animation: spin 3s linear infinite; background: rgba(255,100,150,0.4); }
   @keyframes spin { 100% { transform: rotate(360deg); } }
+
+  /* 飘落爱心 */
   .hearts-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
   .heart { position: absolute; top: -40px; font-size: 20px; animation: fall linear infinite; opacity: 0.7; }
   @keyframes fall { 0% { transform: translateY(0) rotate(0deg); opacity: 0.8; } 100% { transform: translateY(110vh) rotate(360deg); opacity: 0; } }
+
+  /* 烟花画布 */
   #fireworksCanvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 50; }
-  .main-wrapper { position: relative; z-index: 10; text-align: center; }
+
+  /* 主界面跳动爱心 */
+  .main-wrapper { position: relative; z-index: 10; text-align: center; cursor: pointer; }
   .title { color: #f8c8dc; font-size: 2.2rem; margin-bottom: 30px; text-shadow: 0 0 20px rgba(255,100,150,0.6); letter-spacing: 6px; animation: glow 2s ease-in-out infinite alternate; }
   @keyframes glow { from { text-shadow: 0 0 10px rgba(255,100,150,0.4); } to { text-shadow: 0 0 30px rgba(255,100,150,0.9), 0 0 60px rgba(255,80,130,0.4); } }
-  .heart-btn { font-size: 80px; cursor: pointer; animation: beat 1.2s ease-in-out infinite; transition: transform 0.3s; user-select: none; filter: drop-shadow(0 0 15px rgba(255,80,120,0.7)); }
+  
+  .heart-btn { font-size: 100px; animation: beat 1.2s ease-in-out infinite; transition: transform 0.3s; user-select: none; filter: drop-shadow(0 0 20px rgba(255,80,120,0.8)); }
   .heart-btn:hover { transform: scale(1.15); }
   @keyframes beat { 0%, 100% { transform: scale(1); } 15% { transform: scale(1.15); } 30% { transform: scale(1); } 45% { transform: scale(1.1); } }
+  
   .hint { color: rgba(248,200,220,0.6); margin-top: 20px; font-size: 0.9rem; animation: blink 2s ease-in-out infinite; }
   @keyframes blink { 0%, 100% { opacity: 0.4; } 50% { opacity: 1; } }
-  .countdown-wrapper { margin-top: 35px; display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
-  .countdown-item { background: rgba(255,100,150,0.12); border: 1px solid rgba(255,150,180,0.25); border-radius: 12px; padding: 12px 16px; min-width: 70px; backdrop-filter: blur(6px); }
-  .countdown-num { font-size: 1.8rem; color: #f8c8dc; font-weight: bold; text-shadow: 0 0 10px rgba(255,100,150,0.5); animation: pulse-num 1s ease-in-out infinite alternate; }
-  .countdown-label { font-size: 0.7rem; color: rgba(248,200,220,0.5); margin-top: 4px; letter-spacing: 2px; }
-  @keyframes pulse-num { from { opacity: 0.8; } to { opacity: 1; text-shadow: 0 0 18px rgba(255,100,150,0.8); } }
-  .countdown-msg { color: #f8c8dc; font-size: 1.1rem; margin-top: 16px; letter-spacing: 3px; animation: glow 2s ease-in-out infinite alternate; }
-  .letter-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(10,5,15,0.85); z-index: 100; display: flex; justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: opacity 0.6s ease; }
+
+  /* 信件弹层 */
+  .letter-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(10,5,15,0.85); z-index: 100; display: flex; justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: opacity 0.6s ease; overflow-y: auto; padding: 20px 0; }
   .letter-overlay.open { opacity: 1; pointer-events: all; }
-  .envelope { width: 90%; max-width: 520px; background: linear-gradient(180deg, #fff8f0 0%, #fff0e6 100%); border-radius: 8px; padding: 40px 35px; box-shadow: 0 0 40px rgba(255,100,150,0.3), 0 10px 30px rgba(0,0,0,0.4); transform: scale(0.7) rotateX(20deg); transition: transform 0.7s cubic-bezier(0.34, 1.56, 0.64, 1); position: relative; border: 1px solid rgba(255,180,200,0.3); }
+  
+  .envelope { width: 90%; max-width: 520px; background: linear-gradient(180deg, #fff8f0 0%, #fff0e6 100%); border-radius: 8px; padding: 40px 35px; box-shadow: 0 0 40px rgba(255,100,150,0.3), 0 10px 30px rgba(0,0,0,0.4); transform: scale(0.7) rotateX(20deg); transition: transform 0.7s cubic-bezier(0.34, 1.56, 0.64, 1); position: relative; border: 1px solid rgba(255,180,200,0.3); margin: auto; }
   .letter-overlay.open .envelope { transform: scale(1) rotateX(0deg); }
   .envelope::before { content: '💌'; position: absolute; top: -20px; left: 50%; transform: translateX(-50%); font-size: 36px; }
+  
   .letter-content { color: #4a2c3d; font-size: 1rem; line-height: 2; text-align: left; white-space: pre-line; opacity: 0; transition: opacity 0.8s ease 0.4s; }
   .letter-overlay.open .letter-content { opacity: 1; }
-  .letter-sign { text-align: right; margin-top: 20px; color: #c4567a; font-size: 1.05rem; }
-  .close-btn { position: absolute; top: 12px; right: 16px; background: none; border: none; font-size: 1.4rem; color: #c4567a; cursor: pointer; opacity: 0.6; transition: opacity 0.3s; }
+  
+  .letter-sign { text-align: right; margin-top: 20px; color: #c4567a; font-size: 1.05rem; font-weight: bold; }
+  .close-btn { position: absolute; top: 12px; right: 16px; background: none; border: none; font-size: 1.4rem; color: #c4567a; cursor: pointer; opacity: 0.6; transition: opacity 0.3s; z-index: 10; }
   .close-btn:hover { opacity: 1; }
+
+  /* 视频触发按钮 */
+  .video-trigger { display: block; margin: 30px auto 0; padding: 12px 25px; background: linear-gradient(45deg, #ff6b9d, #ff4081); color: #fff; border: none; border-radius: 30px; font-size: 1rem; cursor: pointer; box-shadow: 0 4px 15px rgba(255,64,129,0.4); transition: all 0.3s; font-family: inherit; letter-spacing: 2px; animation: beat 1.2s ease-in-out infinite; }
+  .video-trigger:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(255,64,129,0.6); }
+
+  /* 视频弹窗 */
+  .video-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 300; display: flex; justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: opacity 0.4s; }
+  .video-modal.active { opacity: 1; pointer-events: all; }
+  .video-wrapper { position: relative; width: 90%; max-width: 600px; border-radius: 12px; overflow: hidden; box-shadow: 0 0 50px rgba(255,100,150,0.5); animation: video-glow 2s ease-in-out infinite alternate; }
+  @keyframes video-glow { from { box-shadow: 0 0 30px rgba(255,100,150,0.4); } to { box-shadow: 0 0 60px rgba(255,100,150,0.8); } }
+  .video-wrapper video { width: 100%; display: block; }
+  .close-video { position: absolute; top: -40px; right: 0; color: #fff; font-size: 2rem; cursor: pointer; background: none; border: none; opacity: 0.8; transition: opacity 0.3s; }
+  .close-video:hover { opacity: 1; }
+
+  /* 星星背景 */
   .stars { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; }
   .star { position: absolute; width: 2px; height: 2px; background: #fff; border-radius: 50%; animation: twinkle 3s ease-in-out infinite alternate; }
   @keyframes twinkle { from { opacity: 0.2; } to { opacity: 1; } }
-  @media (max-width: 480px) { .title { font-size: 1.6rem; } .heart-btn { font-size: 60px; } .envelope { padding: 30px 22px; } .letter-content { font-size: 0.9rem; } .countdown-item { min-width: 58px; padding: 10px; } .countdown-num { font-size: 1.4rem; } }
+
+  /* 手机端适配 */
+  @media (max-width: 480px) { 
+    .title { font-size: 1.6rem; } 
+    .heart-btn { font-size: 80px; } 
+    .envelope { padding: 30px 22px; } 
+    .letter-content { font-size: 0.9rem; } 
+  }
 </style>
 </head>
 <body>
 
+<!-- 音乐控制 -->
 <button class="music-btn" id="musicBtn">🎵</button>
 <audio id="bgmAudio" loop><source src="bgm.mp3" type="audio/mpeg"></audio>
+
 <div class="stars" id="stars"></div>
 <div class="hearts-container" id="heartsContainer"></div>
 <canvas id="fireworksCanvas"></canvas>
 
+<!-- 主界面：跳动爱心 -->
 <div class="main-wrapper" id="mainWrapper">
   <div class="title">✨ 七夕快乐 ✨</div>
   <div class="heart-btn" id="heartBtn">💖</div>
   <div class="hint">— 点击爱心，打开星星的信 —</div>
-  <div class="countdown-wrapper" id="countdownWrapper">
-    <div class="countdown-item"><div class="countdown-num" id="cd-days">00</div><div class="countdown-label">天</div></div>
-    <div class="countdown-item"><div class="countdown-num" id="cd-hours">00</div><div class="countdown-label">时</div></div>
-    <div class="countdown-item"><div class="countdown-num" id="cd-mins">00</div><div class="countdown-label">分</div></div>
-    <div class="countdown-item"><div class="countdown-num" id="cd-secs">00</div><div class="countdown-label">秒</div></div>
-  </div>
-  <div class="countdown-msg" id="countdownMsg"></div>
 </div>
 
+<!-- 信件弹层 -->
 <div class="letter-overlay" id="letterOverlay">
   <div class="envelope">
     <button class="close-btn" id="closeBtn">✕</button>
     <div class="letter-content">💓亲爱的y先生：
 
-        从2024到2026，我们一起走过了快两年，在这两年里，我们有过开心也有过争吵，有过幸福也有难过，我们始终握紧对方的手，没有放开。我希望我们会有一个又一个两年，我想我们始终都好好的！
+从2024到2026，我们一起走过了快两年，在这两年里，我们有过开心也有过争吵，有过幸福也有难过，我们始终握紧对方的手，没有放开。我希望我们会有一个又一个两年，我想我们始终都好好的！
 
-        我有许多的小毛病，谢谢亲爱的包容着我。我总是因为别人而生气，是我对自己的不自信，我总害怕你会被别人的三言两语影响，总觉得自己不够好。但是我愿意去信任你对我的爱，试着去关注我们俩自己，而不去在意无关紧要的人。我是个小气的、偏执的人，我喜欢你对我独一无二的爱。我想你的眼里全是我，只关心我。我不知道明年后年的我会怎么样，但我知道现在的我，我只想好好爱着你，哪怕后面在我们生活中出现的是我们的小孩，我也不想因为她影响我们。在我看来，当我们在一起，就只是我们。
+我有许多的小毛病，谢谢亲爱的包容着我。我总是因为别人而生气，是我对自己的不自信，我总害怕你会被别人的三言两语影响，总觉得自己不够好。但是我愿意去信任你对我的爱，试着去关注我们俩自己，而不去在意无关紧要的人。我是个小气的、偏执的人，我喜欢你对我独一无二的爱。我想你的眼里全是我，只关心我。我不知道明年后年的我会怎么样，但我知道现在的我，我只想好好爱着你，哪怕后面在我们生活中出现的是我们的小孩，我也不想因为她影响我们。在我看来，当我们在一起，就只是我们。
 
-        我属于你，你也只能属于我！我爱你💕亲爱的y先生，愿我们长长久久！
+我属于你，你也只能属于我！我爱你💕亲爱的y先生，愿我们长长久久！
 
-<div class="letter-sign">爱你的星星💫
-2026年8月19日</div></div>
+这是我们在一起度过的又一个七夕。看着聊天记录里那一遍遍的“爱你乖”，心里觉得特别踏实。
+谢谢你一直以来的陪伴和包容。未来的日子，我们还要一起走很远很远。</div>
+    <div class="letter-sign">爱你的星星💫
+2026年8月19日</div>
+    
+    <!-- 视频播放按钮 -->
+    <button class="video-trigger" id="playVideoBtn">💌 点击播放我们的回忆</button>
+  </div>
+</div>
+
+<!-- 视频播放弹窗 -->
+<div class="video-modal" id="videoModal">
+  <div class="video-wrapper">
+    <button class="close-video" id="closeVideoBtn">×</button>
+    <video id="loveVideo" controls playsinline>
+      <source src="video.mp4" type="video/mp4">
+      您的浏览器不支持视频播放
+    </video>
   </div>
 </div>
 
 <script>
-  // 音乐控制
+  // ===== 音乐控制 =====
   const musicBtn = document.getElementById('musicBtn');
   const bgmAudio = document.getElementById('bgmAudio');
   let isPlaying = false;
   const playMusic = () => { bgmAudio.play().then(() => { isPlaying = true; musicBtn.classList.add('playing'); }).catch(() => {}); };
   musicBtn.addEventListener('click', () => { if (isPlaying) { bgmAudio.pause(); isPlaying = false; musicBtn.classList.remove('playing'); } else { playMusic(); } });
-  window.addEventListener('load', () => { playMusic(); });
-  document.addEventListener('click', () => { if (!isPlaying) playMusic(); }, { once: true });
 
-  // 星星
+  // 🎉 七夕彩蛋：判断是否是 8月19日
+  const now = new Date();
+  const isQixiDay = (now.getMonth() === 7 && now.getDate() === 19);
+  if (isQixiDay) {
+    // 自动播放音乐
+    window.addEventListener('load', () => { playMusic(); });
+    // 如果浏览器拦截自动播放，用户点击屏幕任意位置也会播放
+    document.addEventListener('click', () => { if (!isPlaying) playMusic(); }, { once: true });
+  }
+
+  // ===== 星星背景 =====
   const starsEl = document.getElementById('stars');
   for (let i = 0; i < 80; i++) { const s = document.createElement('div'); s.className = 'star'; s.style.left = Math.random()*100+'%'; s.style.top = Math.random()*100+'%'; s.style.animationDelay = Math.random()*3+'s'; s.style.width = s.style.height = (Math.random()*2+1)+'px'; starsEl.appendChild(s); }
 
-  // 爱心
+  // ===== 飘落爱心 =====
   const heartsContainer = document.getElementById('heartsContainer');
   const heartEmojis = ['💕', '💗', '💖', '💓', '✨', '🩷', '♥'];
   function createHeart() { const h = document.createElement('div'); h.className = 'heart'; h.textContent = heartEmojis[Math.floor(Math.random()*heartEmojis.length)]; h.style.left = Math.random()*100+'%'; h.style.fontSize = (Math.random()*16+12)+'px'; h.style.animationDuration = (Math.random()*4+5)+'s'; heartsContainer.appendChild(h); setTimeout(() => h.remove(), 10000); }
   setInterval(createHeart, 400);
 
-  // 烟花
+  // ===== 烟花特效 =====
   const canvas = document.getElementById('fireworksCanvas');
   const ctx = canvas.getContext('2d');
   let particles = [], fireworksActive = false;
@@ -123,19 +175,49 @@
   function createFirework() { const x = Math.random()*canvas.width, y = Math.random()*canvas.height*0.6, colors = ['#ff6b9d','#ffa3c4','#ff4081','#f8c8dc','#fff','#ffd700'], c = colors[Math.floor(Math.random()*colors.length)]; for(let i=0;i<60;i++) particles.push(new Particle(x,y,c)); }
   function animateFireworks() { if (!fireworksActive && particles.length===0) return; ctx.clearRect(0,0,canvas.width,canvas.height); particles.forEach((p,i) => { p.update(); p.draw(); if(p.alpha<=0) particles.splice(i,1); }); requestAnimationFrame(animateFireworks); }
   function startFireworks() { fireworksActive = true; animateFireworks(); let c=0; const iv = setInterval(()=>{ createFirework(); c++; if(c>20) clearInterval(iv); }, 300); setTimeout(()=>{ fireworksActive=false; }, 8000); }
+  
+  // 🎉 七夕彩蛋：如果是 8月19日，页面加载后自动放烟花
+  if (isQixiDay) { window.addEventListener('load', () => { startFireworks(); }); }
 
-  // 倒计时
-  const qixiDate = new Date('2026-08-19T00:00:00+08:00').getTime();
-  const cdDays = document.getElementById('cd-days'), cdHours = document.getElementById('cd-hours'), cdMins = document.getElementById('cd-mins'), cdSecs = document.getElementById('cd-secs'), cdMsg = document.getElementById('countdownMsg'), cdWrapper = document.getElementById('countdownWrapper');
-  function pad(n) { return n < 10 ? '0' + n : '' + n; }
-  function updateCountdown() { const diff = qixiDate - Date.now(); if (diff <= 0) { cdWrapper.style.display = 'none'; cdMsg.textContent = '🎋 七夕已到，愿我们的爱长长久久 🎋'; return; } cdDays.textContent = pad(Math.floor(diff/(1000*60*60*24))); cdHours.textContent = pad(Math.floor((diff%(1000*60*60*24))/(1000*60*60))); cdMins.textContent = pad(Math.floor((diff%(1000*60*60))/(1000*60))); cdSecs.textContent = pad(Math.floor((diff%(1000*60))/1000)); }
-  updateCountdown(); setInterval(updateCountdown, 1000);
+  // ===== 信件打开 & 烟花触发 =====
+  const heartBtn = document.getElementById('heartBtn');
+  const overlay = document.getElementById('letterOverlay');
+  const closeBtn = document.getElementById('closeBtn');
 
-  // 信件 & 烟花触发
-  const heartBtn = document.getElementById('heartBtn'), overlay = document.getElementById('letterOverlay'), closeBtn = document.getElementById('closeBtn');
   heartBtn.addEventListener('click', () => { overlay.classList.add('open'); startFireworks(); });
   closeBtn.addEventListener('click', () => { overlay.classList.remove('open'); });
   overlay.addEventListener('click', (e) => { if (e.target === overlay) overlay.classList.remove('open'); });
+
+  // ===== 视频弹窗控制 =====
+  const playVideoBtn = document.getElementById('playVideoBtn');
+  const videoModal = document.getElementById('videoModal');
+  const closeVideoBtn = document.getElementById('closeVideoBtn');
+  const loveVideo = document.getElementById('loveVideo');
+
+  playVideoBtn.addEventListener('click', () => {
+    videoModal.classList.add('active');
+    loveVideo.play();
+    // 播放视频时暂停背景音乐
+    if(isPlaying) { bgmAudio.pause(); }
+  });
+
+  closeVideoBtn.addEventListener('click', () => {
+    videoModal.classList.remove('active');
+    loveVideo.pause();
+    loveVideo.currentTime = 0; // 重置进度
+    // 关闭视频后恢复背景音乐
+    if(isPlaying) { bgmAudio.play(); }
+  });
+  
+  // 点击弹窗外部关闭视频
+  videoModal.addEventListener('click', (e) => {
+    if (e.target === videoModal) {
+      videoModal.classList.remove('active');
+      loveVideo.pause();
+      loveVideo.currentTime = 0;
+      if(isPlaying) { bgmAudio.play(); }
+    }
+  });
 </script>
 </body>
 </html>
